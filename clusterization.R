@@ -16,7 +16,7 @@ gc()
 ##########################
 # Calculate correlation distance square for each pair of genes, across samples.
 data.cor <- as.matrix(1-(cor(t(data), method="pearson"))^2)
-saveRDS(data.cor, file=paste0(dir, "Data/", "data.cor"))
+saveRDS(data.cor, file=paste0(dir, "cor/", "data.cor"))
 
 
 gc()
@@ -84,7 +84,77 @@ for (m1 in 1:cl){
 # write results.pcor output file
 colnames(results.pcor.[% nofk %]) <- seq(from=1, to=cl)
 rownames(results.pcor.[% nofk %]) <- seq(from=1, to=cl)
-saveRDS(results.pcor.[% nofk %], file= paste0(dir,"cor/","pval/","results.pcor.",[% nofk %]))
+saveRDS(results.pcor.[% nofk %], file= paste0(dir,"cor/", "pval/", "results.pcor.",[% nofk %]))
 print("results saved")
+
+
+gc()
+#################################################
+##  compute intra - inter cluster correlation  ##
+#################################################
+# create a matrix to write INTRA cluster values
+results.intra <- matrix(nrow = 9, ncol = length(mycl))
+colnames(results.intra) <- mycl
+rownames(results.intra) <- c("max inter cor","2max inter cor",
+                             "min inter cor", "2min inter cor",
+                             "dif inter cor", "dif inter cor", 
+                             "avg inter cor",
+                             "90% inter cor","10% inter cor")
+# create a matrix to write INTER cluster values
+results.inter <- matrix(nrow = 9, ncol = length(mycl))
+colnames(results.inter) <- mycl
+rownames(results.inter) <- c("max inter cor","2max inter cor",
+                             "min inter cor", "2min inter cor",
+                             "dif inter cor", "dif inter cor", 
+                             "avg inter cor",
+                             "90% inter cor","10% inter cor")
+
+# create a counter to pass iteration argument to marix
+count = 0
+# loop for loading files results.pxxx.xx
+# and write average values to one single table called results ???
+for (i in mycl){
+  # load results.pcor output file
+  y <- readRDS(file = paste0(dir, "cor/", "pval/", "results.pcor.", i))
+  
+  count = count + 1
+  results.intra[1, count] = top2(diag(y))[1] # max inter cor
+  results.intra[2, count] = top2(diag(y))[2] # 2max inter cor
+  results.intra[3, count] = top2(diag(y))[3] # min inter cor
+  results.intra[4, count] = top2(diag(y))[4] # 2min inter cor
+  results.intra[5, count] = (top2(diag(y))[1]) - (top2(diag(y))[3]) # max - min inter corr
+  results.intra[6, count] = (top2(diag(y))[2]) - (top2(diag(y))[4]) # 2max - min inter corr
+  results.intra[7, count] = mean(diag(y)) # avg inter corr
+  results.intra[8, count] = confidence_interval(diag(y), 0.9)["upper"] # 90% inter corr
+  results.intra[9, count] = confidence_interval(diag(y), 0.9)["lower"] # 10% inter corr
+}
+
+# create a counter to pass iteration argument to marix
+count = 0
+# loop for loading files results.pxxx.xx
+# and write average values to one single table called results
+for (i in mycl){
+  # load results from p valor correlation test inter - intra cluster
+  y <- readRDS(file = paste0(dir,"Data/scaled/", "results.pcor.", i))
+  
+  count = count + 1
+  results.inter[1, count] = top2(y[upper.tri(y)])[1] # max inter cor
+  results.inter[2, count] = top2(y[upper.tri(y)])[2] # 2max inter cor
+  results.inter[3, count] = top2(y[upper.tri(y)])["min.1"] # min inter cor
+  results.inter[4, count] = top2(y[upper.tri(y)])["min.2"] # 2min inter cor
+  results.inter[5, count] = mean(c(top2(y[upper.tri(y)])["min.1"]),(top2(y[upper.tri(y)])["min.2"])) # max - min inter cor
+  results.inter[6, count] = (top2(y[upper.tri(y)])[2]) - (top2(y[upper.tri(y)])["min.2"]) # 2max - min inter cor
+  results.inter[7, count] = mean(y[upper.tri(y)]) # avg inter cor
+  results.inter[8, count] = confidence_interval((y[upper.tri(y)]),0.9)["upper"] # 90% inter cor
+  results.inter[9, count] = confidence_interval((y[upper.tri(y)]),0.9)["lower"] # 10% inter cor
+}
+
+
+gc()
+######################################################################
+##  check min intra cluster- max inter cluster euclidean distances  ##
+######################################################################
+A <- mean(c((1-results.intra[1,]),(1-results.intra[2,])))/sqrt(1-results.inter[5,])
+# B <- sqrt(1- results.inter[5,])/mean(c((1-results.intra[1,]),(1-results.intra[2,])))
 
 
