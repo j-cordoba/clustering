@@ -1,3 +1,34 @@
+top2 <- function(M){
+  n <-  length(M)
+  
+  max.1 <- -Inf
+  max.2 <- -Inf
+  
+  for(i in 1:n){
+    if(M[i] > max.1){
+      max.2 <- max.1
+      max.1 <- M[i]
+    }
+    else if(M[i] > max.2){
+      max.2 <- M[i]
+    }
+  }
+  
+  min.1 <- +Inf
+  min.2 <- +Inf
+  
+  for(i in 1:n){
+    if(M[i] < min.1){
+      min.2 <- min.1
+      min.1 <- M[i]
+    }
+    else if(M[i] < min.2){
+      min.2 <- M[i]
+    }
+  }
+  return(c("max.1" = max.1, "max.2" = max.2, "min.1" = min.1, "min.2" = min.2))
+}
+
 #########################
 ## path specifications ##
 #########################
