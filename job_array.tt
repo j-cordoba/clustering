@@ -1,0 +1,11 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -V
+#$ -cwd
+[% IF queue %]#$ -q [% queue %][% END %]
+#$ -t 1-[% T %]
+[% IF TC %]#$ -tc [% TC %][% END %]
+
+JOB=`perl -nle "print if $. == ${SGE_TASK_ID}" [% list %]`
+
+$JOB
