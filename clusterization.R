@@ -6,29 +6,28 @@
 data.cor <- as.matrix(1-(cor(t(data), method="pearson"))^2)
 saveRDS(data.cor, file=paste0(dir, "Data/", "data.cor"))
 
-k.values <- [% nofk %]
+##########################
+##  compute correlation ##
+##########################
+# Build clusters based on correlation distance square for each pair of genes, across samples.
+k.values <- [% nofk %] # number of clusters, explore different number
 
 # calculate kmeans for k = nofk variable
 km <- pam(data.per, k = k.values, diss = TRUE)
-
+# export kmeans objet
+saveRDS(km, file= paste0(dir,"cor/", "pval/" ,"km[% nofk %]"))
+print("kmeans saved")
 
 # define method, (max) number of clusters for writing output
-# the name of the graphs and other features of graph colours
 method = "kmedoids" # "kmedoids" the method used to clusterize our data
 cl = max(km$clustering)
 mycl = km$clustering
 
-# export kmeans objet
-saveRDS(km, file= paste0(dir,"cor/", "pval/" ,"km[% nofk %]"))
 
 gc()
-print("kmeans saved")
-
 #####################################################################
 ##  compute p-values and correlation of genes intra/inter clusters ##
 #####################################################################
-# function to compute euclidean distance between cluster matrix and central cluster vector (cluster matrix's mean)
-#mydist <- function(mat, vec){return(apply((mat - vec)^2, 1, sum))}
 
 # create a table for results base on number of clusters
 #results.pval.[% nofk %] = matrix(nrow = cl, ncol = cl)
