@@ -37,24 +37,26 @@ closedir(DIR);
 
 # function to parse outfmt6
 my %bad_ids_for = read_outfmt6(@files);
-my %new_old_ids_for = read_ids($new_old_ids_tab)
+my %new_old_ids_for = read_ids($new_old_ids_tab);
 
-### %bad_ids_for
-### %new_old_ids_for
-
-my $outfile = 'outfile.txt';
+my $outfile = 'trace_conta.txt';
 open my $out, '>' , $outfile;
 
-foreach $id (keys %bad_ids_for){
-my $conta        = $new_old_ids_for{$id};
-my $conta_fun    = $bad_ids_for{$id}{fun}
-my $conta_acc    = $bad_ids_for{$id}{acc};
-say {$out} join qq{\t}, $conta, $id, $conta_acc, $conta_;
-}
+        foreach $id (keys %bad_ids_for){
+                my $conta        = $new_old_ids_for{$id};
+                my $conta_acc    = $bad_ids_for{$id}{acc};
+                my $conta_sp     = $bad_ids_for{$id}{sp};
+                my $conta_fun    = $bad_ids_for{$id}{fun};
+                        if ($conta) {
+                                say {$out} join qq{\t}, $conta, $id, $conta_acc, $conta_sp, $conta_fun;
+                        } else {
+                                next;
+                        }
+        }
 close $out;
 
 sub read_ids{
-my $file = @_;
+my $file = shift;
 my %hash;
 
         open my $in, '<', $file;
@@ -98,21 +100,20 @@ my %hash;
                         # Read the line and split in columns (ID + sp + acc)
                         my @elements = split "\t", $line;
 
-                        my $id       = $elements[0];
-                        my $sp       = $elements[1];
+                        my $id  = $elements[0];
+                        my $sp  = $elements[1];
                         next LINE if $sp =~ m/Euglena/xms; # Only lines that are not Euglena!
 
-                        my $function = $elements[4];
-                        my $acc      = $elements[6];
+                        my $fun = $elements[3];
+                        my $acc = $elements[6];
 
                         # Create a hash of hash [ID -> values]
                         $hash{$id}{sp}  = $sp;
-                        $hash{$id}{fun} = $function;
+                        $hash{$id}{fun} = $fun;
                         $hash{$id}{acc} = $acc;
                 }
         }
         return %hash;
 }
-
 
 
