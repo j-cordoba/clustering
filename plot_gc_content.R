@@ -77,24 +77,26 @@ for (i in 1:length(exp)) {
     geom_vline(xintercept = h, col="red") + 
     labs(y="Frequency", x= '') + 
     theme_classic() +
-    theme(legend.position = "none", text = element_text(size=20))
+    theme(legend.position = "none", text = element_text(size=15), axis.text.y = element_blank()) +
+    scale_x_continuous(limits=c(0, 1), breaks= seq(from=0.2, to=0.8, by=0.2))
   
   p2 <- ggplot(data=data, aes(myList[[i]]$GC, myList[[i]]$Length)) + 
     geom_hex(colour="black", bins = 40) + 
     labs(y='', x= '') + 
     theme_classic() + 
-    theme(legend.position = "none", text = element_text(size=20))
+    theme(legend.position = "none", text = element_text(size=15), axis.text.y = element_blank()) +
+    scale_x_continuous(limits=c(0, 1), breaks= seq(from=0.2, to=0.8, by=0.2))
   
   # export to file
   png(file= paste0("C:/Users/LANCIOS-PC/Documents/Oficina/Labo/Paper_Transcriptome/Grph/new_assembly3/pval/",
                    "GC_content_", exp[i], ".png"),
-      width=15, height=7, units="cm", res=300, pointsize=10)
+      width=15, height=7, units="cm", res=300, pointsize=1)
   
   multiplot(p1, p2, cols=2)
-  grid.text("GC content", y=1, just = "top", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 20, fontface = "bold", fontfamily="Times"))
-  grid.text(paste0(exp[i]," = ",round(h, digits = 2)), y= 0.9, just = "bottom", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 15, fontface = "bold", fontfamily="Times"))
-  grid.text("A", y=0.95, x= 0.08, just = "top", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 15, fontface = "bold", fontfamily="Times"))
-  grid.text("B", y=0.95, x= 0.58, just = "top", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 15, fontface = "bold", fontfamily="Times"))
+  grid.text("GC content", x = 0.45, y=1, just = "top", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 10, fontface = "bold", fontfamily="Times"))
+  grid.text(paste0(exp[i]," = ",round(h, digits = 2)), x= 0.45, y= 0.9, just = "bottom", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 8, fontface = "bold", fontfamily="Times"))
+  grid.text("A", y=0.95, x= 0.08, just = "top", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 8, fontface = "bold", fontfamily="Times"))
+  grid.text("B", y=0.95, x= 0.58, just = "top", vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2), gp = gpar(fontsize = 8, fontface = "bold", fontfamily="Times"))
  
   dev.off()
 }
