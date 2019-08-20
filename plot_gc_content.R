@@ -77,14 +77,14 @@ for (i in 1:length(exp)) {
     geom_vline(xintercept = h, col="red") + 
     labs(y="Frequency", x= '') + 
     theme_classic() +
-    theme(legend.position = "none", text = element_text(size=15), axis.text.y = element_blank()) +
+    theme(legend.position = "none", text = element_text(size=15), axis.text.y = element_blank(), axis.ticks.y = element_line()) +
     scale_x_continuous(limits=c(0, 1), breaks= seq(from=0.2, to=0.8, by=0.2))
   
   p2 <- ggplot(data=data, aes(myList[[i]]$GC, myList[[i]]$Length)) + 
     geom_hex(colour="black", bins = 40) + 
     labs(y='', x= '') + 
     theme_classic() + 
-    theme(legend.position = "none", text = element_text(size=15), axis.text.y = element_blank()) +
+    theme(legend.position = "none", text = element_text(size=15), axis.text.y = element_blank(), axis.ticks.y = element_line()) +
     scale_x_continuous(limits=c(0, 1), breaks= seq(from=0.2, to=0.8, by=0.2))
   
   # export to file
