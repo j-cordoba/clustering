@@ -9,9 +9,6 @@
 
 #$ -N counting
 
-# Problema al contar las reads conteo varias veces DRK1_pus_1.fasta DRKP1_1.fasta DRKP2_1.fasta DRKS1_1.fasta DRKS2_1.fasta DRKU1_1.fasta DRKU2_1.fasta DRK2_pus_1.fasta  DRKP1_2.fasta DRKP$
-
-
 for i in YSD DRK UNK MTC
 
 do
