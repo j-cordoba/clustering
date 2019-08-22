@@ -23,7 +23,7 @@ library(cluster) # Loads the cluster library for kmedoids method
 #########################
 
 # stablish your own directory
-dir = "/media/vol2/home/jcordoba/Transcriptomics/ALL/new_assembly3/okay/NO_FINAL_set/publicset/abundance/"
+dir = "/path/to/my/directory"
 file = "ALL.gene.TPM.not_cross_norm" # default specifications for table are -> sep= "\t", row.names= 1, header= T
 # Create a folder to export the results
 dir.create(path=paste0(dir,"cor/"), showWarnings = FALSE)
