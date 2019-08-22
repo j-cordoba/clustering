@@ -33,7 +33,7 @@ top2 <- function(M){
 ## path specifications ##
 #########################
 # stablish your own directory
-dir = "/media/vol2/home/jcordoba/Transcriptomics/ALL/new_assembly3/okay/NO_FINAL_set/publicset/abundance/"
+dir = "/path/to/my/directory"
 
 # Create a folder to export the results
 dir.create(path=paste0(dir,"cor/"), showWarnings = FALSE)
@@ -149,11 +149,11 @@ for (i in mycl){
   y <- readRDS(file = paste0(dir, "cor/", "pval/", "results.pcor.", i))
   
   count = count + 1
-  results.intra[1, count] = top2(diag(y))[1] # max inter cor
-  results.intra[2, count] = top2(diag(y))[2] # 2max inter cor
-  results.intra[3, count] = top2(diag(y))[3] # min inter cor
-  results.intra[4, count] = top2(diag(y))[4] # 2min inter cor
-  results.intra[5, count] = (top2(diag(y))[1]) - (top2(diag(y))[3]) # max - min inter corr
+  results.intra[1, count] = top2(diag(y))[1] # max intra cor
+  results.intra[2, count] = top2(diag(y))[2] # 2max intra cor
+  results.intra[3, count] = top2(diag(y))[3] # min intra cor
+  results.intra[4, count] = top2(diag(y))[4] # 2min intra cor
+  results.intra[5, count] = mean(c(top2(diag(y))[1], top2(diag(y))[2])) # average max
   results.intra[6, count] = (top2(diag(y))[2]) - (top2(diag(y))[4]) # 2max - min inter corr
   results.intra[7, count] = mean(diag(y)) # avg inter corr
   results.intra[8, count] = confidence_interval(diag(y), 0.9)["upper"] # 90% inter corr
@@ -180,12 +180,12 @@ for (i in mycl){
   results.inter[9, count] = confidence_interval((y[upper.tri(y)]),0.9)["lower"] # 10% inter cor
 }
 
+saveRDS(results.inter, file = paste0(dir, "Data/new_assembly3/pval/", "results.inter"))
 
 gc()
 ######################################################################
 ##  check min intra cluster- max inter cluster euclidean distances  ##
 ######################################################################
-A <- mean(c((1-results.intra[1,]),(1-results.intra[2,])))/sqrt(1-results.inter[5,])
-# B <- sqrt(1- results.inter[5,])/mean(c((1-results.intra[1,]),(1-results.intra[2,])))
-
+ratio <- results.inter[5,]/results.intra[5,]
+ratio[which.min(ratio)]
 
