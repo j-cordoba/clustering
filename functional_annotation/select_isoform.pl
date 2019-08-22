@@ -1,3 +1,20 @@
+#!/usr/bin/env perl
+
+use Modern::Perl '2011';
+use autodie;
+
+use Tie::IxHash;
+use Smart::Comments;
+use List::AllUtils qw(sum reduce max);
+use File::Basename;
+use Path::Class 'file';
+
+unless (@ARGV == 3) {
+die <<"EOT";
+Usage: $0 <infile.aa.pub.fasta> <expression.table> <infile.pubids>
+EOT
+}
+
 my $seq_for = read_fasta($protein_fasta);
 my $expr_for = read_expr($expression_file);
 my $class_for = read_table($evigene_file);
