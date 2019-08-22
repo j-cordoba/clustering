@@ -58,7 +58,7 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 #########################
 ## path specifications ##
 #########################
-dir="C:/Users/LANCIOS-PC/Documents/Oficina/Labo/Paper_Transcriptome/Data/new_assembly3/"
+dir="/path/to/my/directory"
 
 exp = c("EML","DRK","KLY","UNK","YSD","KLY.cl")
 
