@@ -96,7 +96,7 @@ gc()
 ## path specifications ##
 #########################
 # stablish your own directory
-dir = "C:/Users/LANCIOS-PC/Documents/Oficina/Labo/Paper_Transcriptome/"
+dir = "/path/to/my/directory"
 
 # Create a folder to export the results
 dir.create(path=paste0(dir,"Data/new_assembly3/pval/"), showWarnings = FALSE)
