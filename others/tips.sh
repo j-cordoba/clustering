@@ -33,6 +33,8 @@ tail -n +2 /home/javier/Downloads/uniprot-yourlist%3mapped.tab | cut -f1,3,4 | s
 
 # Extract results from blastp and add the correspondance between evigene pub id 
 awk '(NR==FNR){unp[$2]=$2;id[$2]=$1;next}($1 in unp){print id[$1]"\t"$0}' uniprot.col uniprot.tab > file4.txt
+awk -F "\t" '(NR==FNR) {a[$1]=$2;next} ($1 in a) {print $0 "\t" a[$1]}' table list
+awk -F "\t" '(NR==FNR) {a[$1]=$2FS$3FS$4;next} ($1 in a) {print $0 "\t" a[$1]}' table list
 
 	NR==FNR # NR is the current input line number and FNR the current file's line number. The two will be equal only while the 1st file is being read.
 	unp[$2]=$2 # Save column 2 (unp) from the first file (argument) uniprot.col in hash-array using column 2 as the key
