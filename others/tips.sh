@@ -56,6 +56,13 @@ awk -F "\t" 'FNR==NR{a[$1]=$1;next}!($1 in a){print $0}' conta.idl proteins.rat 
 #https://askubuntu.com/questions/707843/merge-files-using-a-common-column
 #deberia cambiar el orden de los archivos? file4 es mas pequeno
 ###
+#######################
+### NCBI ANNOTATION ###
+#######################
+
+NCBI annotation refseq
+for line in `cat file`; do esearch -db nucleotide -query $line | esummary | perl -nle 'if (/<Title>(.+)<\/Title>/) { print $1 }'; done
+for line in `cat gene2.nt.tomap`; do printf "$line \t" && esearch -db nucleotide -query $line | esummary | perl -nle 'if (/<Title>(.+)<\/Title>/) { print $1 }' ; done > xxx.nt.annotation
 
 ##########################
 ### EVIGENE ANNOTATION ###
