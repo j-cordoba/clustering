@@ -56,21 +56,22 @@ awk -F "\t" 'FNR==NR{a[$1]=$1;next}!($1 in a){print $0}' conta.idl proteins.rat 
 #https://askubuntu.com/questions/707843/merge-files-using-a-common-column
 #deberia cambiar el orden de los archivos? file4 es mas pequeno
 ###
-#######################
-### NCBI ANNOTATION ###
-#######################
+##################
+### ANNOTATION ###
+##################
 
+# NCBI
 NCBI annotation refseq
 for line in `cat file`; do esearch -db nucleotide -query $line | esummary | perl -nle 'if (/<Title>(.+)<\/Title>/) { print $1 }'; done
 for line in `cat gene2.nt.tomap`; do printf "$line \t" && esearch -db nucleotide -query $line | esummary | perl -nle 'if (/<Title>(.+)<\/Title>/) { print $1 }' ; done > xxx.nt.annotation
 
-##########################
-### EVIGENE ANNOTATION ###
-##########################
-
+# EVIGENE
 # Annotation of full proteins from final of evigene set.
 blastp -query FINAL.aa_pub.fa -db /media/javier/Datas/uniprotdb/uniprot -out FINAL_50_blastp -max_hsps 1 -evalue 1e-50 -word_size 3 -max_target_seqs 1 -num_threads 16 -outfmt 6
 
+# Count number of empty fields in each line
+awk -F"\t" '{for(i=0;i<=NF;i++){if(!$i){C++}};print C;C=0}' filename
+#ex column 2 & 3 -> cut -f2,3 ann.output | awk -F"\t" '{for(i=0;i<=NF;i++){if(!$i){C++}};print C;C=0}'
 ##############################################
 #### PROTEINAS QUANTIFICADAS CON REPORTER ####
 ##############################################
